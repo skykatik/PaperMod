@@ -50,7 +50,7 @@ public final class PaperMod extends Mod{
         newspaperPress = new GenericCrafter("newspaper-press"){{
             requirements(Category.crafting, ItemStack.with(Items.titanium, 150, Items.silicon, 50));
             liquidCapacity = 40f;
-            craftTime = 30f;
+            craftTime = 75f;
             size = 2;
             health = 320;
             outputItem = new ItemStack(newspaper, 1);
