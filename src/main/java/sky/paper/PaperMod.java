@@ -3,7 +3,6 @@ package sky.paper;
 import arc.*;
 import arc.graphics.Color;
 import arc.util.*;
-import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.game.EventType;
 import mindustry.mod.Mod;

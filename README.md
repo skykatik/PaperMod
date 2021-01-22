@@ -1,4 +1,5 @@
-# BaseJavaMod
+# PaperMod
+A small jar-mod adding a newspaper
 
 ## Installation
 Download the latest release (`.jar`) [here](). <br>
