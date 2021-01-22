@@ -1,10 +1,10 @@
 {
-  "name": "",
-  "displayName": "",
-  "description": "",
-  "author": "",
-  "main": "",
+  "name": "paper-mod",
+  "displayName": "PaperMod",
+  "description": "Please no...",
+  "author": "Skat",
+  "main": "sky.paper.PaperMod",
   "hidden": false,
-  "version": "",
+  "version": "0.1",
   "minGameVersion": 120
 }
