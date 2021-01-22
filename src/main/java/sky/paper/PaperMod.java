@@ -24,7 +24,7 @@ public final class PaperMod extends Mod{
     @Override
     public void init(){
         Events.on(EventType.WithdrawEvent.class, event -> {
-            if(event.item == newspaper && event.player == player){
+            if(event.item == newspaper && event.amount == 1 && event.player == player){
                 Time.runTask(3f, () -> {
                     Core.net.httpGet(latestNewsUrl,
                                      res -> {
