@@ -28,7 +28,7 @@ public final class PaperMod extends Mod{
                 Time.runTask(3f, () -> {
                     Core.net.httpGet(latestNewsUrl,
                                      res -> {
-                                         BaseDialog dialog = new BaseDialog("frog");
+                                         BaseDialog dialog = new BaseDialog("@paper-mod.breaking-news");
                                          dialog.cont.add(res.getResultAsString()).row();
                                          dialog.cont.button("@ok", dialog::hide).size(100f, 50f);
                                          dialog.show();
