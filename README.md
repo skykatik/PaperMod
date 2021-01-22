@@ -2,7 +2,7 @@
 A small jar-mod adding a newspaper
 
 ## Installation
-Download the latest release (`.jar`) [here](). <br>
+Download the latest release (`.jar`) [here](https://github.com/skykatik/PaperMod/releases/latest). <br>
 Put `.jar` to one of these paths:
 * Windows: `%AppData%/Mindustry/mods`
 * Linux: `~/.local/share/Mindustry/mods` 
