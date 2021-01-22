@@ -43,7 +43,8 @@ public final class PaperMod extends Mod{
     public void loadContent(){
 
         newspaper = new Item("newspaper", Color.valueOf("E2E9EE")){{
-
+            flammability = 1.15f;
+            explosiveness = 0.2f;
         }};
 
         newspaperPress = new GenericCrafter("newspaper-press"){{
