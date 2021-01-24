@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 import static mindustry.Vars.player;
 
 public final class PaperMod extends Mod{
-    public static final String latestNewsUrl = "https://raw.githubusercontent.com/skykatik/PaperMod/main/news/@/@.txt";
+    public static final String baseNewsUrl = "https://raw.githubusercontent.com/skykatik/PaperMod/main/news/@/@.txt";
 
     public static Item newspaper;
 
@@ -32,7 +32,7 @@ public final class PaperMod extends Mod{
         Events.on(EventType.WithdrawEvent.class, event -> {
             if(event.item == newspaper && event.amount == 1 && event.player == player){
                 Time.runTask(3f, () -> {
-                    Core.net.httpGet(Strings.format(latestNewsUrl, directoryFormatter.format(LocalDateTime.now()), dayFormatter.format(LocalDateTime.now())),
+                    Core.net.httpGet(Strings.format(baseNewsUrl, directoryFormatter.format(LocalDateTime.now()), dayFormatter.format(LocalDateTime.now())),
                                      res -> {
                                          BaseDialog dialog = new BaseDialog("@paper-mod.breaking-news");
                                          dialog.cont.add(res.getResultAsString()).row();
