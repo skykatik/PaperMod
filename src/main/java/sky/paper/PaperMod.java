@@ -12,21 +12,27 @@ import mindustry.world.Block;
 import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.world.draw.DrawAnimation;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import static mindustry.Vars.player;
 
 public final class PaperMod extends Mod{
-    public static final String latestNewsUrl = "https://raw.githubusercontent.com/skykatik/PaperMod/main/news/latest.txt";
+    public static final String latestNewsUrl = "https://raw.githubusercontent.com/skykatik/PaperMod/main/news/@/@.txt";
 
     public static Item newspaper;
 
     public static Block newspaperPress;
+
+    private final DateTimeFormatter directoryFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
+    private final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd");
 
     @Override
     public void init(){
         Events.on(EventType.WithdrawEvent.class, event -> {
             if(event.item == newspaper && event.amount == 1 && event.player == player){
                 Time.runTask(3f, () -> {
-                    Core.net.httpGet(latestNewsUrl,
+                    Core.net.httpGet(Strings.format(latestNewsUrl, directoryFormatter.format(LocalDateTime.now()), dayFormatter.format(LocalDateTime.now())),
                                      res -> {
                                          BaseDialog dialog = new BaseDialog("@paper-mod.breaking-news");
                                          dialog.cont.add(res.getResultAsString()).row();
