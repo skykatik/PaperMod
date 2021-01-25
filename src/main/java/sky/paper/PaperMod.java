@@ -82,6 +82,7 @@ public final class PaperMod extends Mod{
             targetGround=true;
             ammo(newspaper,Bullets.standardThoriumBig);
             health = 1000;
+            spread = 0.5f;
         }};
     }
 }
