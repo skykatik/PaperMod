@@ -80,7 +80,7 @@ public final class PaperMod extends Mod{
             //cooldown = 0,5f;
             targetAir=true;
             targetGround=true;
-            ammo(newspaper,Bullets.standardCopper);
+            ammo(newspaper,Bullets.standardThoriumBig);
             health = 1000;
         }};
     }
