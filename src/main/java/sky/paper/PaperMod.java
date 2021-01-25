@@ -9,6 +9,8 @@ import mindustry.mod.Mod;
 import mindustry.type.*;
 import mindustry.ui.dialogs.BaseDialog;
 import mindustry.world.Block;
+import mindustry.world.blocks.defense.turrets.ItemTurret;
+import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.world.draw.DrawAnimation;
 
@@ -23,6 +25,7 @@ public final class PaperMod extends Mod{
     public static Item newspaper;
 
     public static Block newspaperPress;
+    public static Block pneumaticPost;
 
     private final DateTimeFormatter directoryFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
     private final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd");
@@ -67,6 +70,18 @@ public final class PaperMod extends Mod{
             consumes.liquid(Liquids.water, 3.5f);
             consumes.items(ItemStack.with(Items.sporePod, 1, Items.phaseFabric, 1));
             consumes.power(3f);
+        }};
+        pneumaticPost = new ItemTurret("pneumatic-post"){{
+            requirements(Category.turret,ItemStack.with(newspaper,150,Items.titanium,200,Items.silicon,250));
+            liquidCapacity = 40f;
+            maxAmmo=35;
+            size = 4;
+            range =60 * 8f;
+            //cooldown = 0,5f;
+            targetAir=true;
+            targetGround=true;
+            ammo(newspaper,Bullets.standardCopper);
+            health = 1000;
         }};
     }
 }
