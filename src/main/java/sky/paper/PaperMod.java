@@ -14,6 +14,10 @@ import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.world.draw.DrawAnimation;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -35,17 +39,24 @@ public final class PaperMod extends Mod{
         Events.on(EventType.WithdrawEvent.class, event -> {
             if(event.item == newspaper && event.amount == 1 && event.player == player){
                 Time.runTask(3f, () -> {
-                    Core.net.httpGet(Strings.format(baseNewsUrl, directoryFormatter.format(LocalDateTime.now()), dayFormatter.format(LocalDateTime.now())),
-                                     res -> {
-                                         BaseDialog dialog = new BaseDialog("@paper-mod.breaking-news");
-                                         dialog.cont.add(res.getResultAsString()).row();
-                                         dialog.cont.button("@ok", dialog::hide).size(100f, 50f);
-                                         dialog.show();
-                                     },
-                                     Log::err);
+                    BaseDialog dialog = new BaseDialog("@paper-mod.selector");
+                    //BufferedReader br=new BufferedReader();
+                    dialog.cont.button("@ok", dialog::hide).size(100f, 50f);
+                    dialog.show();
                 });
             }
         });
+    }
+
+    public void showNews(String url){
+        Core.net.httpGet(url,
+                res -> {
+                    BaseDialog dialog = new BaseDialog("@paper-mod.breaking-news");
+                    dialog.cont.add(res.getResultAsString()).row();
+                    dialog.cont.button("@ok", dialog::hide).size(100f, 50f);
+                    dialog.show();
+                },
+                Log::err);
     }
 
     @Override
@@ -76,13 +87,13 @@ public final class PaperMod extends Mod{
             liquidCapacity = 40f;
             maxAmmo=35;
             size = 4;
-            range =30 * 8f;
+            range =45 * 8f;
             cooldown = 0.5f;
             targetAir=true;
             targetGround=true;
             ammo(newspaper,Bullets.standardThoriumBig);
             health = 1000;
-            spread = 1f;
+            spread = 0.5f;
         }};
     }
 }
