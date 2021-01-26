@@ -76,13 +76,13 @@ public final class PaperMod extends Mod{
             liquidCapacity = 40f;
             maxAmmo=35;
             size = 4;
-            range =45 * 8f;
+            range =30 * 8f;
             cooldown = 0.5f;
             targetAir=true;
             targetGround=true;
             ammo(newspaper,Bullets.standardThoriumBig);
             health = 1000;
-            spread = 0.5f;
+            spread = 1f;
         }};
     }
 }
