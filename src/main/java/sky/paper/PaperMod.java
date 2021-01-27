@@ -40,7 +40,12 @@ public final class PaperMod extends Mod{
             if(event.item == newspaper && event.amount == 1 && event.player == player){
                 Time.runTask(3f, () -> {
                     BaseDialog dialog = new BaseDialog("@paper-mod.selector");
-                    //BufferedReader br=new BufferedReader();
+                    BufferedReader br=new BufferedReader(new InputStreamReader(new InputStream(new URL("o"))));
+                    while(true){
+                    	String baka=br.readLine();
+                    	if(baka==null){break;}
+                    	dialog.cont.button("br",()-> {dialog::hide;showNews(br);}).size(200f, 50f);
+                    }
                     dialog.cont.button("@ok", dialog::hide).size(100f, 50f);
                     dialog.show();
                 });
