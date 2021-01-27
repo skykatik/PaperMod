@@ -2,6 +2,8 @@ package sky.paper;
 
 import arc.*;
 import arc.graphics.Color;
+import arc.scene.ui.Button;
+import arc.scene.ui.layout.Table;
 import arc.util.*;
 import mindustry.content.*;
 import mindustry.game.EventType;
@@ -14,18 +16,23 @@ import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.world.draw.DrawAnimation;
 
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static mindustry.Vars.player;
 
 public final class PaperMod extends Mod{
-    public static final String baseNewsUrl = "https://raw.githubusercontent.com/skykatik/PaperMod/main/news/@/@.txt";
+    public static final String baseNewsUrl = "https://raw.githubusercontent.com/@/main/news/@/@.txt";
 
     public static Item newspaper;
 
     public static Block newspaperPress;
     public static Block pneumaticPost;
+
+    public static BaseDialog dialog = null;
 
     private final DateTimeFormatter directoryFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
     private final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd");
@@ -35,17 +42,52 @@ public final class PaperMod extends Mod{
         Events.on(EventType.WithdrawEvent.class, event -> {
             if(event.item == newspaper && event.amount == 1 && event.player == player){
                 Time.runTask(3f, () -> {
-                    Core.net.httpGet(Strings.format(baseNewsUrl, directoryFormatter.format(LocalDateTime.now()), dayFormatter.format(LocalDateTime.now())),
-                                     res -> {
-                                         BaseDialog dialog = new BaseDialog("@paper-mod.breaking-news");
-                                         dialog.cont.add(res.getResultAsString()).row();
-                                         dialog.cont.button("@ok", dialog::hide).size(100f, 50f);
-                                         dialog.show();
-                                     },
-                                     Log::err);
+                    dialog = new BaseDialog("@paper-mod.selector");
+                    Table t= new Table();
+
+                    BufferedReader br= null;
+                    try {
+                        br = new BufferedReader(new InputStreamReader(new URL("https://raw.githubusercontent.com/skykatik/PaperMod/main/news/index.txt").openStream()));
+                    } catch (MalformedURLException e) {
+                        return;
+                    } catch (IOException e) {
+                        return;
+                    }
+                    while(true){
+                        String baka= null;
+                        try {
+                            baka = br.readLine();
+                        } catch (IOException e) {
+                            return;
+                        }
+                        if(baka==null){break;}
+                        String finalBaka = baka;
+                        t.button(baka,new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.hide();
+                                showNews(finalBaka);
+                            }
+                        }).size(300f,50f).row();
+                    }
+                    dialog.cont.add(t);
+                    t.button("@ok", dialog::hide).size(100f, 50f).row();
+                    dialog.show();
                 });
             }
         });
+    }
+
+    public void showNews(String url){
+        String usrl=Strings.format(baseNewsUrl,url, directoryFormatter.format(LocalDateTime.now()), dayFormatter.format(LocalDateTime.now()));
+        Core.net.httpGet(usrl,
+                res -> {
+                    BaseDialog dialog = new BaseDialog(url);
+                    dialog.cont.add(res.getResultAsString()).row();
+                    dialog.cont.button("@ok", dialog::hide).size(100f, 50f);
+                    dialog.show();
+                },
+                Log::err);
     }
 
     @Override
@@ -76,13 +118,13 @@ public final class PaperMod extends Mod{
             liquidCapacity = 40f;
             maxAmmo=35;
             size = 4;
-            range =30 * 8f;
+            range =45 * 8f;
             cooldown = 0.5f;
             targetAir=true;
             targetGround=true;
             ammo(newspaper,Bullets.standardThoriumBig);
             health = 1000;
-            spread = 1f;
+            spread = 0.5f;
         }};
     }
 }
