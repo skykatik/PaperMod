@@ -14,22 +14,23 @@ import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.world.draw.DrawAnimation;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static mindustry.Vars.player;
 
 public final class PaperMod extends Mod{
-    public static final String baseNewsUrl = "https://raw.githubusercontent.com/skykatik/PaperMod/main/news/@/@.txt";
+    public static final String baseNewsUrl = "https://raw.githubusercontent.com/@/main/news/@/@.txt";
 
     public static Item newspaper;
 
     public static Block newspaperPress;
     public static Block pneumaticPost;
+
+    public static BaseDialog dialog = null;
 
     private final DateTimeFormatter directoryFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
     private final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd");
@@ -39,12 +40,31 @@ public final class PaperMod extends Mod{
         Events.on(EventType.WithdrawEvent.class, event -> {
             if(event.item == newspaper && event.amount == 1 && event.player == player){
                 Time.runTask(3f, () -> {
-                    BaseDialog dialog = new BaseDialog("@paper-mod.selector");
-                    BufferedReader br=new BufferedReader(new InputStreamReader(new InputStream(new URL("https://raw.githubusercontent.com/skykatik/PaperMod/main/news/index.txt"))));
+                    dialog = new BaseDialog("@paper-mod.selector");
+                    BufferedReader br= null;
+                    try {
+                        br = new BufferedReader(new InputStreamReader(new URL("https://raw.githubusercontent.com/skykatik/PaperMod/multiPaper/news/index.txt").openStream()));
+                    } catch (MalformedURLException e) {
+                        return;
+                    } catch (IOException e) {
+                        return;
+                    }
                     while(true){
-                    	String baka=br.readLine();
-                    	if(baka==null){break;}
-                     //dialog.cont.button(br, ()-> {dialog::hide;showNews(br);}).size(200f, 50f);
+                        String baka= null;
+                        try {
+                            baka = br.readLine();
+                        } catch (IOException e) {
+                            return;
+                        }
+                        if(baka==null){break;}
+                        String finalBaka = baka;
+                        dialog.cont.button(baka, new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.hide();
+                                showNews(finalBaka);
+                            }
+                        }).size(200f, 50f);
                     }
                     dialog.cont.button("@ok", dialog::hide).size(100f, 50f);
                     dialog.show();
@@ -54,9 +74,10 @@ public final class PaperMod extends Mod{
     }
 
     public void showNews(String url){
-        Core.net.httpGet(url,
+        String usrl=Strings.format(baseNewsUrl,url, directoryFormatter.format(LocalDateTime.now()), dayFormatter.format(LocalDateTime.now()));
+        Core.net.httpGet(usrl,
                 res -> {
-                    BaseDialog dialog = new BaseDialog("@paper-mod.breaking-news");
+                    BaseDialog dialog = new BaseDialog(url);
                     dialog.cont.add(res.getResultAsString()).row();
                     dialog.cont.button("@ok", dialog::hide).size(100f, 50f);
                     dialog.show();
