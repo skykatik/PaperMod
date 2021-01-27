@@ -47,7 +47,7 @@ public final class PaperMod extends Mod{
 
                     BufferedReader br= null;
                     try {
-                        br = new BufferedReader(new InputStreamReader(new URL("https://raw.githubusercontent.com/skykatik/PaperMod/multiPaper/news/index.txt").openStream()));
+                        br = new BufferedReader(new InputStreamReader(new URL("https://raw.githubusercontent.com/skykatik/PaperMod/main/news/index.txt").openStream()));
                     } catch (MalformedURLException e) {
                         return;
                     } catch (IOException e) {
@@ -68,7 +68,7 @@ public final class PaperMod extends Mod{
                                 dialog.hide();
                                 showNews(finalBaka);
                             }
-                        }).size(500f,50f).row();
+                        }).size(300f,50f).row();
                     }
                     dialog.cont.add(t);
                     t.button("@ok", dialog::hide).size(100f, 50f).row();
