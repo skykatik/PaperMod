@@ -44,7 +44,7 @@ public final class PaperMod extends Mod{
                     while(true){
                     	String baka=br.readLine();
                     	if(baka==null){break;}
-                    	dialog.cont.button(br, (br)-> {dialog::hide;showNews(br);}).size(200f, 50f);
+                    	dialog.cont.button(br, ()-> {dialog::hide;showNews(br);}).size(200f, 50f);
                     }
                     dialog.cont.button("@ok", dialog::hide).size(100f, 50f);
                     dialog.show();
