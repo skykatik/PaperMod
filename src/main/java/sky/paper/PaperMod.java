@@ -2,6 +2,7 @@ package sky.paper;
 
 import arc.*;
 import arc.graphics.Color;
+import arc.scene.ui.Button;
 import arc.scene.ui.layout.Table;
 import arc.util.*;
 import mindustry.content.*;
@@ -61,13 +62,16 @@ public final class PaperMod extends Mod{
                         }
                         if(baka==null){break;}
                         String finalBaka = baka;
-                        t.button(baka, new Runnable() {
+                        Button button=new Button();
+                        button.name=baka;
+                        button.clicked(new Runnable() {
                             @Override
                             public void run() {
                                 dialog.hide();
                                 showNews(finalBaka);
                             }
-                        }).size(200f, 50f);
+                        });
+                        t.add(button);
                     }
                     dialog.cont.add(t);
                     dialog.cont.button("@ok", dialog::hide).size(100f, 50f);
