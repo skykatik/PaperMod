@@ -71,7 +71,7 @@ public final class PaperMod extends Mod{
                                 showNews(finalBaka);
                             }
                         });
-                        t.add(button);
+                        t.add(button).size(100f,50f).row();
                     }
                     dialog.cont.add(t);
                     dialog.cont.button("@ok", dialog::hide).size(100f, 50f);
