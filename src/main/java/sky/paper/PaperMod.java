@@ -71,10 +71,17 @@ public final class PaperMod extends Mod{
                                 showNews(finalBaka);
                             }
                         });
-                        t.add(button).size(100f,50f).row();
+                        t.add(button).size(500f,50f).row();
+                        t.button(baka,new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.hide();
+                                showNews(finalBaka);
+                            }
+                        }).row();
                     }
                     dialog.cont.add(t);
-                    dialog.cont.button("@ok", dialog::hide).size(100f, 50f);
+                    t.button("@ok", dialog::hide).size(100f, 50f).row();
                     dialog.show();
                 });
             }
