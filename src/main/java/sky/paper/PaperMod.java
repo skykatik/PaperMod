@@ -62,23 +62,13 @@ public final class PaperMod extends Mod{
                         }
                         if(baka==null){break;}
                         String finalBaka = baka;
-                        Button button=new Button();
-                        button.name=baka;
-                        button.clicked(new Runnable() {
-                            @Override
-                            public void run() {
-                                dialog.hide();
-                                showNews(finalBaka);
-                            }
-                        });
-                        t.add(button).size(500f,50f).row();
                         t.button(baka,new Runnable() {
                             @Override
                             public void run() {
                                 dialog.hide();
                                 showNews(finalBaka);
                             }
-                        }).row();
+                        }).size(500).row();
                     }
                     dialog.cont.add(t);
                     t.button("@ok", dialog::hide).size(100f, 50f).row();
