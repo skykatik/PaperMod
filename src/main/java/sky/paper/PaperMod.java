@@ -2,6 +2,7 @@ package sky.paper;
 
 import arc.*;
 import arc.graphics.Color;
+import arc.scene.ui.layout.Table;
 import arc.util.*;
 import mindustry.content.*;
 import mindustry.game.EventType;
@@ -41,6 +42,8 @@ public final class PaperMod extends Mod{
             if(event.item == newspaper && event.amount == 1 && event.player == player){
                 Time.runTask(3f, () -> {
                     dialog = new BaseDialog("@paper-mod.selector");
+                    Table t= new Table();
+
                     BufferedReader br= null;
                     try {
                         br = new BufferedReader(new InputStreamReader(new URL("https://raw.githubusercontent.com/skykatik/PaperMod/multiPaper/news/index.txt").openStream()));
@@ -58,7 +61,7 @@ public final class PaperMod extends Mod{
                         }
                         if(baka==null){break;}
                         String finalBaka = baka;
-                        dialog.cont.button(baka, new Runnable() {
+                        t.button(baka, new Runnable() {
                             @Override
                             public void run() {
                                 dialog.hide();
@@ -66,6 +69,7 @@ public final class PaperMod extends Mod{
                             }
                         }).size(200f, 50f);
                     }
+                    dialog.cont.add(t);
                     dialog.cont.button("@ok", dialog::hide).size(100f, 50f);
                     dialog.show();
                 });
