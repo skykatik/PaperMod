@@ -2,9 +2,9 @@ package sky.paper;
 
 import arc.*;
 import arc.graphics.Color;
-import arc.scene.ui.Button;
 import arc.scene.ui.layout.Table;
 import arc.util.*;
+import arc.util.io.Streams;
 import mindustry.content.*;
 import mindustry.game.EventType;
 import mindustry.mod.Mod;
@@ -12,13 +12,11 @@ import mindustry.type.*;
 import mindustry.ui.dialogs.BaseDialog;
 import mindustry.world.Block;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
-import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.world.draw.DrawAnimation;
 
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -43,33 +41,23 @@ public final class PaperMod extends Mod{
             if(event.item == newspaper && event.amount == 1 && event.player == player){
                 Time.runTask(3f, () -> {
                     dialog = new BaseDialog("@paper-mod.selector");
-                    Table t= new Table();
+                    Table t = new Table();
 
-                    BufferedReader br= null;
-                    try {
-                        br = new BufferedReader(new InputStreamReader(new URL("https://raw.githubusercontent.com/skykatik/PaperMod/main/news/index.txt").openStream()));
-                    } catch (MalformedURLException e) {
-                        return;
-                    } catch (IOException e) {
-                        return;
+                    String[] arr = {};
+                    try{
+                        arr = Streams.copyString(new URL("https://raw.githubusercontent.com/skykatik/PaperMod/main/news/index.txt").openStream()).split("\\s+");
+                    }catch(IOException e){
+                        Log.err("Failed to download index.txt");
+                        Log.err(e);
                     }
-                    while(true){
-                        String baka= null;
-                        try {
-                            baka = br.readLine();
-                        } catch (IOException e) {
-                            return;
-                        }
-                        if(baka==null){break;}
-                        String finalBaka = baka;
-                        t.button(baka,new Runnable() {
-                            @Override
-                            public void run() {
-                                dialog.hide();
-                                showNews(finalBaka);
-                            }
-                        }).size(300f,50f).row();
+
+                    for(String s : arr){
+                        t.button(s, () -> {
+                            dialog.hide();
+                            showNews(s);
+                        }).size(300f, 50f).row();
                     }
+
                     dialog.cont.add(t);
                     t.button("@ok", dialog::hide).size(100f, 50f).row();
                     dialog.show();
@@ -79,8 +67,7 @@ public final class PaperMod extends Mod{
     }
 
     public void showNews(String url){
-        String usrl=Strings.format(baseNewsUrl,url, directoryFormatter.format(LocalDateTime.now()), dayFormatter.format(LocalDateTime.now()));
-        Core.net.httpGet(usrl,
+        Core.net.httpGet(Strings.format(baseNewsUrl, url, directoryFormatter.format(LocalDateTime.now()), dayFormatter.format(LocalDateTime.now())),
                 res -> {
                     BaseDialog dialog = new BaseDialog(url);
                     dialog.cont.add(res.getResultAsString()).row();
@@ -113,16 +100,17 @@ public final class PaperMod extends Mod{
             consumes.items(ItemStack.with(Items.sporePod, 1, Items.phaseFabric, 1));
             consumes.power(3f);
         }};
+
         pneumaticPost = new ItemTurret("pneumatic-post"){{
-            requirements(Category.turret,ItemStack.with(newspaper,150,Items.titanium,200,Items.silicon,250));
+            requirements(Category.turret, ItemStack.with(newspaper, 150, Items.titanium, 200, Items.silicon, 250));
             liquidCapacity = 40f;
-            maxAmmo=35;
+            maxAmmo = 35;
             size = 4;
-            range =45 * 8f;
+            range = 45 * 8f;
             cooldown = 0.5f;
-            targetAir=true;
-            targetGround=true;
-            ammo(newspaper,Bullets.standardThoriumBig);
+            targetAir = true;
+            targetGround = true;
+            ammo(newspaper, Bullets.standardThoriumBig);
             health = 1000;
             spread = 0.5f;
         }};
