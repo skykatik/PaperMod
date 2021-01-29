@@ -15,12 +15,12 @@ import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.world.draw.DrawAnimation;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static mindustry.Vars.player;
+import static mindustry.Vars.*;
 
 public final class PaperMod extends Mod{
     public static final String baseNewsUrl = "https://raw.githubusercontent.com/@/main/news/@/@.txt";
@@ -37,34 +37,42 @@ public final class PaperMod extends Mod{
 
     @Override
     public void init(){
+        ui.menufrag = new PMenuFragment();
+        ui.menufrag.build(ui.menuGroup);
+        Core.scene.add(ui.menuGroup);
+
         Events.on(EventType.WithdrawEvent.class, event -> {
             if(event.item == newspaper && event.amount == 1 && event.player == player){
-                Time.runTask(3f, () -> {
-                    dialog = new BaseDialog("@paper-mod.selector");
-                    Table t = new Table();
-
-                    String[] arr = {};
-                    try{
-                        arr = Streams.copyString(new URL("https://raw.githubusercontent.com/skykatik/PaperMod/main/news/index.txt").openStream()).split("\\s+");
-                    }catch(IOException e){
-                        Log.err("Failed to download index.txt");
-                        Log.err(e);
-                    }
-
-                    for(String s : arr){
-                        t.button(s, () -> {
-                            dialog.hide();
-                            showNews(s);
-                        }).size(300f, 50f).row();
-                    }
-
-                    dialog.cont.add(t);
-                    t.button("@ok", dialog::hide).size(100f, 50f).row();
-                    dialog.show();
-                });
+                Time.runTask(3f, () -> Events.fire(new NewsShowEvent()));
             }
         });
+
+        Events.on(NewsShowEvent.class, event -> {
+            dialog = new BaseDialog("@paper-mod.selector");
+            Table t = new Table();
+
+            String[] arr = {};
+            try{
+                arr = Streams.copyString(new URL("https://raw.githubusercontent.com/skykatik/PaperMod/main/news/index.txt").openStream()).split("\\s+");
+            }catch(IOException e){
+                Log.err("Failed to download index.txt");
+                Log.err(e);
+            }
+
+            for(String s : arr){
+                t.button(s, () -> {
+                    dialog.hide();
+                    showNews(s);
+                }).size(300f, 50f).row();
+            }
+
+            dialog.cont.add(t);
+            t.button("@ok", dialog::hide).size(100f, 50f).row();
+            dialog.show();
+        });
     }
+
+    public static final class NewsShowEvent{}
 
     public void showNews(String url){
         Core.net.httpGet(Strings.format(baseNewsUrl, url, directoryFormatter.format(LocalDateTime.now()), dayFormatter.format(LocalDateTime.now())),
