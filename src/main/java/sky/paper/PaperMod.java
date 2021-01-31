@@ -55,7 +55,7 @@ public final class PaperMod extends Mod{
             try{
                 arr = Streams.copyString(new URL("https://raw.githubusercontent.com/skykatik/PaperMod/main/news/index.txt").openStream()).split("\\s+");
             }catch(IOException e){
-                Log.err("Failed to download index.txt");
+                Log.err("Failed to read index.txt");
                 Log.err(e);
             }
 

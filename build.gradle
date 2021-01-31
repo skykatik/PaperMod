@@ -1,9 +1,6 @@
 import groovy.json.*
 
-plugins{
-    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
-    id 'java'
-}
+apply plugin: "java"
 
 sourceCompatibility = 1.8
 targetCompatibility = 14
