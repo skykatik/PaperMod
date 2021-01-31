@@ -1,0 +1,1 @@
+Tip [tan]#[white]1. To fly, use [lightgray]w[], [lightgray]a[], [lightgray]s[], [lightgray]d
