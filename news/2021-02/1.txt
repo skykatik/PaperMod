@@ -1,0 +1,3 @@
+Tip [tan]#[white]2.
+If you want to get all the icons, then enter this script (press f8 to open the console)
+[green]Core.app.setClipboardText(Iconc.all);
