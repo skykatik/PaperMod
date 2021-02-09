@@ -13,7 +13,7 @@ repositories{
 def json = new JsonSlurper()
 
 ext{
-    mod = json.parseText(file("src/main/resources/mod.json").text)
+    mod = json.parseText(file("assets/mod.json").text)
 
     mindustryVersion = "v${mod['minGameVersion']}"
     modVersion = mod['version']
@@ -59,6 +59,14 @@ jar{
     archiveFileName = "${project.archivesBaseName}-Desktop.jar"
 
     from{configurations.runtimeClasspath.collect{it.isDirectory() ? it : zipTree(it)}}
+
+    from(rootDir){
+        include "mod.json"
+    }
+
+    from("assets/"){
+        include "**"
+    }
 }
 
 task deploy(type: Jar){
