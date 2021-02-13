@@ -114,7 +114,7 @@ public final class PaperMod extends Mod{
             liquidCapacity = 40f;
             maxAmmo = 35;
             size = 4;
-            range = 45 * 8f;
+            range = 35 * 8f;
             cooldown = 0.5f;
             targetAir = true;
             targetGround = true;
